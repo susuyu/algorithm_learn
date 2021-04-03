@@ -1,0 +1,16 @@
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int index = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] != 0) {
+                if (i != index) {
+                    nums[index] = nums[i]; // 把非零值赋给当前该在的位置
+                    nums[i] = 0; // 把当前位置置为0
+                }
+
+                index++; // 非零值索引增加
+            }
+        }
+    }
+};
