@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<vector<int>> levelOrder(Node* root) {
+        if (root == nullptr) {
+            return {};
+        }
+        
+        vector<vector<int>> ans;
+        queue<Node*> que;
+        que.push(root);
+
+        while (!que.empty()) {
+            int count = que.size();
+            vector<int> tmp;
+            while (count--) {
+                auto f = que.front();
+                que.pop();
+
+                tmp.push_back(f->val);
+                for (const auto& child : f->children) {
+                    que.push(child);
+                }
+            }
+
+            ans.push_back(tmp);
+        }
+
+        return ans;
+    }
+};

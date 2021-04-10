@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        vector<int> dp(n, 0);
+        dp[0] = 1;
+
+        int twoPos = 0;
+        int threePos = 0;
+        int fivePos = 0;
+        for (int i = 1; i < n; i++) {
+            int tmpTwo = dp[twoPos] * 2;
+            int tmpThree = dp[threePos] * 3;
+            int tmpFive = dp[fivePos] * 5;
+            dp[i] = min(tmpFive, min(tmpThree, tmpTwo));
+            if (dp[i] == tmpTwo) {
+                twoPos++;
+            }
+
+            if (dp[i] == tmpThree) {
+                threePos++;
+            }
+
+            if (dp[i] == tmpFive) {
+                fivePos++;
+            }
+        }
+
+        return dp[n-1];
+    }
+};

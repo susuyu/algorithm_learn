@@ -1,0 +1,21 @@
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        int n = strs.size();
+        unordered_map<string, vector<string>> keyToOrignal;
+        for (const auto& str : strs) {
+            string count (26, '0');
+            for (const auto& c : str) {
+                count[c - 'a']++;
+            }
+            keyToOrignal[count].emplace_back(str);
+        }
+
+        vector<vector<string>> ans;
+        for (const auto& f : keyToOrignal) {
+            ans.emplace_back(f.second);
+        }
+
+        return ans;
+    }
+};

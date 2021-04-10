@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<int> preorder(Node* root) {
+        if (root == nullptr) {
+            return {};
+        }
+
+        vector<int> ans;
+        Dfs(root, ans);
+        return ans;
+    }
+
+    void Dfs(Node* root, vector<int>& ans)
+    {
+        if (root == nullptr) {
+            return;
+        }
+
+        ans.push_back(root->val);
+        for (const auto& child : root->children) {
+            Dfs(child, ans);
+        }
+    }
+};
