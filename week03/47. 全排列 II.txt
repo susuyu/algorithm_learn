@@ -1,0 +1,36 @@
+class Solution {
+    vector<vector<int>> ans;
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        vector<int> path;
+        vector<bool> used(n, false);
+        Dfs(nums, path, used);
+        return ans;
+    }
+
+    void Dfs(const vector<int>& nums, vector<int>& path, vector<bool>& used)
+    {
+        if (path.size() == nums.size()) {
+            ans.push_back(path);
+            return;
+        }
+
+        for (int i = 0; i < nums.size(); i++) {
+            if (used[i]) {
+                continue;
+            }
+
+            if (i > 0 && !used[i-1] && (nums[i] == nums[i-1])) {
+                continue;
+            }
+            
+            path.push_back(nums[i]);
+            used[i] = true;
+            Dfs(nums, path, used);
+            path.pop_back();
+            used[i] = false;
+        }
+    }
+};
