@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int robotSim(vector<int>& commands, vector<vector<int>>& obstacles) {
+        set<pair<int, int>> obstacleSet;
+        for (const auto& obstacle : obstacles) {
+            obstacleSet.insert(std::make_pair(obstacle[0], obstacle[1]));
+        }
+
+        int x = 0;
+        int y = 0;
+        int direction = 0;
+        int dx[4] = { 0, 1, 0, -1 };
+        int dy[4] = { 1, 0, -1, 0 };
+        int ans = 0;
+        for (const auto& command : commands) {
+            if (command == -2) {
+                direction = (direction + 3) % 4;
+            } else if (command == -1) {
+                direction = (direction + 1) % 4;
+            } else {
+                for (int i = 0; i < command; i++) {
+                    int newX = x + dx[direction];
+                    int newY = y + dy[direction];
+                    if (obstacleSet.find(make_pair(newX, newY)) == obstacleSet.end()) {
+                        x = newX;
+                        y = newY;
+                        ans = max(ans, x * x + y * y);
+                    }
+                }
+            }
+        }
+
+        return ans;
+    }
+};
