@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> ans;
+        Dfs(n, n, ans, "");
+        return ans;
+    }
+
+    void Dfs(int left, int right, vector<string>& ans, string path)
+    {
+        if (left == 0 && right == 0) {
+            ans.push_back(path);
+            return;
+        }
+
+        if (left > 0) {
+            Dfs(left-1, right, ans, path+"(");
+        }
+
+        if (right > left) {
+            Dfs(left, right-1, ans, path+")");
+        }
+    }
+};

@@ -1,0 +1,89 @@
+方法1：双向bfs
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_set<string> wordDict(wordList.begin(), wordList.end());
+        if (wordDict.find(endWord) == wordDict.end()) {
+            return 0;
+        }
+
+        int step = 1;
+        unordered_set<string> beginSet {beginWord};
+        unordered_set<string> endSet {endWord};
+        while (!beginSet.empty()) {
+            if (beginSet.size() > endSet.size()) {
+                unordered_set<string> tmpSet = beginSet;
+                beginSet = endSet;
+                endSet = tmpSet;
+            }
+
+            unordered_set<string> tmpSet;
+            for (const auto& word : beginSet) {
+                string tmp = word;
+                for (int i = 0; i < word.size(); i++) {
+                    char tmpCh = tmp[i];
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        if (tmp[i] == c) {
+                            continue;
+                        }
+
+                        tmp[i] = c;
+                        if (endSet.find(tmp) != endSet.end()) {
+                            return step+1;
+                        }
+                        if (wordDict.find(tmp) != wordDict.end()) {
+                            tmpSet.insert(tmp);
+                            wordDict.erase(tmp);
+                        }
+                    }
+                    tmp[i] = tmpCh;
+                }
+            }
+            beginSet = tmpSet;
+            step++;
+        }
+
+        return 0;
+    }
+};
+
+方法2：单向bfs
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_set<string> wordDict(wordList.begin(), wordList.end());
+        if (wordDict.find(endWord) == wordDict.end()) {
+            return 0;
+        }
+
+        queue<pair<string, int>> que;
+        que.push({beginWord, 1});
+        while (!que.empty()) {
+            auto f = que.front();
+            que.pop();
+
+            if (f.first == endWord) {
+                return f.second;
+            }
+
+            string tmpWord = f.first;
+            int step = f.second;
+            for (int i = 0; i < tmpWord.size(); i++) {
+                char tmpCh = tmpWord[i];
+                for (char c = 'a'; c <= 'z'; c++) {
+                    if (tmpWord[i] == c) {
+                        continue;
+                    }
+                    tmpWord[i] = c;
+                    if (wordDict.find(tmpWord) != wordDict.end()) {
+                        que.push({tmpWord, step+1});
+                        wordDict.erase(tmpWord);
+                    }
+                }
+                tmpWord[i] = tmpCh;
+            }
+        }
+
+        return 0;
+    }
+};

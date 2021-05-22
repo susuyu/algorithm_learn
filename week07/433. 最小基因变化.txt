@@ -1,0 +1,93 @@
+方法1：双向bfs
+class Solution {
+public:
+    int minMutation(string start, string end, vector<string>& bank) {
+        unordered_set<string> bankDict(bank.begin(), bank.end());
+        if (bankDict.find(end) == bankDict.end()) {
+            return -1;
+        }
+
+        unordered_set<string> beginSet {start};
+        unordered_set<string> endSet {end};
+
+        int step = 0;
+        while (!beginSet.empty() && !endSet.empty()) {
+            if (beginSet.size() > endSet.size()) { // 始终以小的集合往中间扩散
+                unordered_set<string> tmpSet = beginSet;
+                beginSet = endSet;
+                endSet = tmpSet;
+            }
+
+            unordered_set<string> tmpSet;
+            for (const auto& word : beginSet) {
+                string tmpWord = word;
+                for (int i = 0; i < word.size(); i++) {
+                    char tmpCh = tmpWord[i];
+                    for (const auto& c : "ACGT") {
+                        if (c == tmpWord[i]) {
+                            continue;
+                        }
+                        tmpWord[i] = c;
+                        if (endSet.find(tmpWord) != endSet.end()) {
+                            return step+1;
+                        }
+                        if (bankDict.find(tmpWord) != bankDict.end()) {
+                            tmpSet.insert(tmpWord);
+                            bankDict.erase(tmpWord); // 删掉防止下次重复查找
+                        }
+                        tmpWord[i] = tmpCh;
+                    }
+                }
+            }
+
+            beginSet = tmpSet;
+            step++;
+        }
+
+        return -1;
+    }
+};
+
+方法2：单向bfs
+class Solution {
+public:
+    int minMutation(string start, string end, vector<string>& bank) {
+        unordered_set<string> bankDict(bank.begin(), bank.end());
+        if (bankDict.find(end) == bankDict.end()) {
+            return -1;
+        }
+
+        queue<pair<string, int>> q; // 记录基因和step
+        q.push({start, 0});
+
+        while(!q.empty()) {
+            auto f = q.front();
+            if (f.first == end) {
+                return f.second;
+            }
+
+            string gene = f.first;
+            int step = f.second;
+            q.pop();
+
+            for (int i = 0; i < gene.length(); i++) {
+                char tmp = gene[i]; // 记录原状态
+                for (char base : "ATCG") {
+                    if (gene[i] == base) { //相同就不变化
+                        continue;
+                    }
+                    gene[i] = base; //修改碱基
+                    if (bankDict.find(gene) != bankDict.end()) {
+                        q.push({gene, step+1});
+                        bankDict.erase(gene); // 找到一个只改一个字符的字符串就从字典里删掉
+                    }
+                }
+
+                gene[i] = tmp; // 恢复原状态,相当于一次只能改一个字符
+
+            }
+        }
+
+        return -1;
+    }
+};

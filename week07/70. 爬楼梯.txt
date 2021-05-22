@@ -1,0 +1,39 @@
+方法1：
+class Solution {
+public:
+    int climbStairs(int n) {
+        if (n <= 2) {
+            return n;
+        }
+
+        int f1 = 1;
+        int f2 = 2;
+        int cur = 0;
+        for (int i = 3; i <= n; i++) {
+            cur = f1 + f2;
+            f1 = f2;
+            f2 = cur;
+        }
+
+        return cur;
+    }
+};
+
+方法2：
+class Solution {
+public:
+    int climbStairs(int n) {
+        if (n <= 2) {
+            return n;
+        }
+
+        vector<int> dp(n+1, 0);
+        dp[1] = 1;
+        dp[2] = 2;
+        for (int i = 3; i <= n; i++) {
+            dp[i] = dp[i-1] + dp[i-2];
+        }
+
+        return dp[n];
+    }
+};
