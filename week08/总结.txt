@@ -1,0 +1,43 @@
+1、并查集不了解不知道是怎么一回事，了解之后会觉得不是那么难，并查集的模板一定要记住。
+2、一般连通图求岛屿数量，省份数量这种题可以用dfs、bfs、并查集多种思路解题。
+
+并查集模板：
+class UnionFind {
+public:
+    UnionFind(int n) {
+        father = vector<int>(n, -1);
+        count = n;
+        for (int i = 0; i < n; i++) {
+            father[i] = i;
+        }
+    }
+
+    int Find(int x) {
+        while (x != father[x]) {
+            x = father[x];
+        }
+
+        return x;
+    }
+
+    void Join(int x, int y) {
+        int fatherX = Find(x);
+        int fatherY = Find(y);
+        if (fatherX == fatherY) {
+            return;
+        }
+
+        father[fatherX] = fatherY;
+        count--;
+    }
+
+    int GetCount()
+    {
+        return count;
+    }
+
+
+private:
+    vector<int> father;
+    int count;
+};
