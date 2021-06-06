@@ -1,0 +1,20 @@
+class Solution {
+public:
+    vector<int> relativeSortArray(vector<int>& arr1, vector<int>& arr2) {
+        int n = arr2.size();
+        unordered_map<int, int> valToPos;
+        for (int i = 0; i < n; i++) {
+            valToPos[arr2[i]] = i;
+        }
+
+        sort(arr1.begin(), arr1.end(), [&](const auto& a, const auto& b) {
+            if (valToPos.count(a)) {
+                return valToPos.count(b) ? valToPos[a] < valToPos[b] : true;
+            } else {
+                return valToPos.count(b) ? false : a < b;
+            }
+        });
+
+        return arr1;
+    }
+};
