@@ -1,0 +1,184 @@
+1、学习课程的最深的感受就是五毒，刷题过遍数，很多题目做一两遍掌握不住，当做了一定的次数之后，有些之前不理解的地方就会豁然开朗。
+
+2、排列组合等递归算法有两种方式，
+   一种是按选与不选来递归，这种一般不用for循环，直接往下一层递归就行；
+   一种就是按选哪个数字进行递归，这种一般都是有一个for循环往下一层进行递归。
+
+3、字符串的动态规划一般都是以数组大小作为状态数组，状态转移方程一般和前一个或者后一个字符的状态有关；二维数组一般和左上角的状态有关。
+
+4、针对二个字符串的动态规划，一般是以两个字符串的长度作为状态数组。
+
+5、二叉树的递归遍历模板：
+前序遍历：
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        if (root == nullptr) {
+            return {};
+        }
+
+        vector<int> ans;
+        Dfs(root, ans);
+        return ans;
+    }
+
+    void Dfs(TreeNode* root, vector<int>& ans)
+    {
+        if (root == nullptr) {
+            return;
+        }
+
+ans.push_back(root->val);
+        Dfs(root->left, ans);
+        Dfs(root->right, ans);
+    }
+};
+
+
+
+中序遍历：
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        if (root == nullptr) {
+            return {};
+        }
+
+        vector<int> ans;
+        Dfs(root, ans);
+        return ans;
+    }
+
+    void Dfs(TreeNode* root, vector<int>& ans)
+    {
+        if (root == nullptr) {
+            return;
+        }
+
+        Dfs(root->left, ans);
+        ans.push_back(root->val);
+        Dfs(root->right, ans);
+    }
+};
+
+后序遍历：
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        if (root == nullptr) {
+            return {};
+        }
+
+        vector<int> ans;
+        Dfs(root, ans);
+        return ans;
+    }
+
+    void Dfs(TreeNode* root, vector<int>& ans)
+    {
+        if (root == nullptr) {
+            return;
+        }
+
+        Dfs(root->left, ans);
+        Dfs(root->right, ans);
+ans.push_back(root->val);
+    }
+};
+
+6、N叉树的递归模板
+前序遍历：
+class Solution {
+public:
+    vector<int> preorder(Node* root) {
+        vector<int> ans;
+        PreOrderDfs(root, ans);
+        return ans;
+    }
+
+    void PreOrderDfs(Node* root, vector<int>& ans)
+    {
+        if (root == nullptr) {
+            return;
+        }
+
+        ans.push_back(root->val);
+        for (const auto& child : root->children) {
+            PreOrderDfs(child, ans);
+        }
+    }
+};
+
+后序遍历：
+class Solution {
+public:
+    vector<int> postorder(Node* root) {
+        vector<int> ans;
+        PostOrderDfs(root, ans);
+        return ans;
+    }
+
+    void PostOrderDfs(Node* root, vector<int>& ans)
+    {
+        if (root == nullptr) {
+            return;
+        }
+
+        for (const auto& child : root->children) {
+            PostOrderDfs(child, ans);
+        }
+
+        ans.push_back(root->val);
+    }
+};
+
+7、并查集模板：
+class UnionFind {
+public:
+    UnionFind(int n) {
+        father = vector<int>(n, -1);
+        count = n;
+        for (int i = 0; i < n; i++) {
+            father[i] = i;
+        }
+    }
+
+    int Find(int x) {
+        while (x != father[x]) {
+            x = father[x];
+        }
+
+        return x;
+    }
+
+    void Join(int x, int y) {
+        int fatherX = Find(x);
+        int fatherY = Find(y);
+        if (fatherX == fatherY) {
+            return;
+        }
+
+        father[fatherX] = fatherY;
+        count--;
+    }
+
+    int GetCount()
+    {
+        return count;
+    }
+
+
+private:
+    vector<int> father;
+    int count;
+};
+
+8、47. 全排列 II这道题剪枝技巧：
+   // 判断该数字是否已经使用过
+   if (used[i]) {
+       continue;
+   }
+   // 针对相同的数字，如果前一位数字没选择，则该相同数字也不选择
+   if (i > 0 && !used[i-1] && (nums[i] == nums[i-1])) {
+       continue;
+   }
